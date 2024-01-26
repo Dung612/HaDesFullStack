@@ -46,7 +46,7 @@
                 <img class="anh2" src="${classpath }/FileUploads/${product.avatar2 }" alt="">
                 <div class="chucnang">
                     <div class="buy" onclick="redirectToThanhToan()">MUA NGAY</div>
-                    <div class="add" onclick="showCart()" >THÊM VÀO GIỎ</div>
+                    <div class="add" onclick="addToCart(${product.id}, 1, '${product.name }') , showCart()" >THÊM VÀO GIỎ</div>
                 </div>
                 </div>
                 <div class="tensanpham"><a href="${classpath }/product-detail/${product.id}">${product.name }</a></div>
@@ -231,6 +231,39 @@
 </body>
 <!-- <script src="${classpath}/frontend/accsents/test.js"></script> -->
 <!-- <script src="${classpath}/frontend/accsents/shop.js"></script> -->
-<script src="${classpath}/frontend/accsents/base.js"></script>
+<!-- Jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<!-- Add to cart -->
+	<script type="text/javascript">
+		addToCart = function(_productId, _quantity, _productName) {		
+			//alert("Thêm "  + _quantity + " sản phẩm '" + _productName + "' vào giỏ hàng ");
+			let data = {
+				productId: _productId, //lay theo id
+				quantity: _quantity,
+				
+			};
+				
+			//$ === jQuery
+			jQuery.ajax({
+				url : "/add-to-cart",
+				type : "POST",
+				contentType: "application/json",
+				data : JSON.stringify(data),
+				dataType : "json", //Kieu du lieu tra ve tu controller la json
+				
+				success : function(jsonResult) {
+					alert(jsonResult.code + ": " + jsonResult.message); 
+					let totalProducts = jsonResult.totalCartProducts;
+					$("#totalCartProductsId").html(totalProducts);
+				},
+				
+				error : function(jqXhr, textStatus, errorMessage) {
+					alert(jsonResult.code + ': Đã có lỗi xay ra...!')
+				},
+			});
+		}
+	</script>
+<script src="${classpath}/frontend/accsents/base.js"></script>  
+
 
 </html>

@@ -2,6 +2,10 @@
 	pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html lang="en">
+<!-- directive của JSTL -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <head>
     <link rel="shortcut icon" href="//theme.hstatic.net/1000306633/1000891824/14/favicon.png?v=587" type="image/png">
 
@@ -365,6 +369,7 @@ h4{
 <body>
 <div class="thanhtoan">
     <div class="thanhtoanl">
+    <form action="${classpath }/cart-view" method="get">
         <h1 onclick="redirectToindex()" style="cursor: pointer;" >HADES STUDIO</h1>
         <div class="thanhtoanl-giohang">
             <a href="${classpath}/frontend/accsents/shop.html">Shop all</a> <span>></span> <span>Thông tin giao hàng</span>
@@ -372,13 +377,13 @@ h4{
         </div>
         <div class="thanhtoanl-title">Thông Tin Giao Hàng</div>
         <div class="thanhtoanl-dangnhap">
-            <span>Bạn đã có tài khoản ?</span><a href="${classpath}/frontend/accsents/login.html">Đăng Nhập</a>
+            <span>Bạn đã có tài khoản ?</span><a href="${classpath}/login">Đăng Nhập</a>
         </div>
         <div class=".thanhtoanl-move">
-            <input class="fullname" type="text" placeholder="Họ Và Tên">
+            <input class="fullname" type="text" name="txtName" value="${user.name }" placeholder="Họ Và Tên">
             <div class="thanhtoanl-emailsdt">
-                <input class="email" type="email" placeholder="Email">
-                <input class="sdt" type="tel" placeholder="Số Điện Thoại">
+                <input class="email" type="email" name="txtEmail" value="${user.email }" placeholder="Email">
+                <input class="sdt" type="tel" name="txtMobile" value="${user.mobile }" placeholder="Số Điện Thoại">
             </div>
             <div class="thanhtoanl-api">
                 <select id="provinceSelect" class="sldiachi">
@@ -394,13 +399,13 @@ h4{
                 </select>
 
             </div>
-            <input class="diachi" type="text" placeholder="Địa Chỉ">
+            <input class="diachi" type="text" name="txtAddress" value="${user.address }" placeholder="Địa Chỉ">
             <h4>Phương Thức Thanh Toán</h4>
             <div class="thanhtoanl-phuongthuc">
                 <input class="cod" type="radio"><span>Thanh toán khi giao hàng (COD)</span>
             </div>
-            <button type="submit" class="btnsucces" >Hoàn Tất Đơn Hàng</button>
-
+            <button onclick="_placeOrder() class="btnsucces" >Hoàn Tất Đơn Hàng</button>
+	</form>
 
         </div>
 
@@ -410,23 +415,25 @@ h4{
         <div class="thanhtoanr-giohang">
             <div class="spgiohang">
                 <div class="content">
-                    <!-- <div class="contentform">
+                     <div class="contentform">
+                     <c:forEach var="item" items="${cart.productCarts }" varStatus="loop">
                         <div class="leftsp">
                             <div class="anh">  
-                                <img src="${classpath}/frontend/accsents/accsent/img/dsc05233_f4651fc12ce24ac28d00ff705d483daf_grande.webp" alt="">
+                                <img src="${classpath}/FileUploads/${item.avatar }">
                             </div>
                             <div class="thongtin">
-                                <div class="name">OCEAN MEDIATION BOXY TEE</div>
+                                <div class="name">${item.productName }</div>
                                 <div class="size">ĐEN / <SPan>L</SPan></div>
                                 <div class="price">
                                         <div class="soluong">1</div>
-                                        <div class="gia">420,000đ</div>
+                                        <div class="gia"><fmt:formatNumber value="${item.price }" minFractionDigits="0" /><sup>đ</sup></div>
                                 </div>
                             </div>
                         </div>
+                        </c:forEach>
                             
                         
-                    </div> -->
+                    </div> 
                 </div>
                 <div class="thanhtoanr-mgg">
                     <input type="text" placeholder="Mã Giảm Giá">
@@ -436,10 +443,13 @@ h4{
                     <div class="titlesmall">Chương Trình Khách Hàng Thân Thiết</div>
                     <button onclick="redirectTologin()">Đăng Nhập</button>
                 </div>
-                <!-- <div class="pricetotal">
+                 <div class="pricetotal">
                     <div class="titlepricetotal">TOTAL</div>
-                    <div class="totalprice">420,000đ</div>
-                </div> -->
+                    <div class="totalprice"><fmt:formatNumber value="${totalCartPrice }"
+																	minFractionDigits="0"></fmt:formatNumber>
+																<sup>đ</sup>
+                    </div>
+                </div>
 
     
             </div>
@@ -467,7 +477,66 @@ h4{
 
     
 </body>
-<script src="${classpath}/frontend/accsents/base.js"></script>
+<!-- Jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!--  <script src="${classpath}/frontend/accsents/base.js"></script> -->
+	<script type="text/javascript">
+		updateProductQuantity = function(_productId, _quantity) {
+			let data = {
+				productId : _productId, //lay theo id
+				quantity : _quantity
+			};
+
+			//$ === jQuery
+			jQuery.ajax({
+				url : "/update-product-quantity",
+				type : "POST",
+				contentType : "application/json",
+				data : JSON.stringify(data),
+				dataType : "json", //Kieu du lieu tra ve tu controller la json
+
+				success : function(jsonResult) {
+					let totalProducts = jsonResult.totalCartProducts; 
+					//Viet lai so luong sau khi bam nut -, +
+					$("#productQuantity_" + jsonResult.productId).html(jsonResult.newQuantity); 
+				},
+
+				error : function(jqXhr, textStatus, errorMessage) {
+					alert("An error occur");
+				}
+			});
+		}
+	</script>
+
+	<script type="text/javascript">
+		function _placeOrder() {
+			//javascript object
+			let data = {				
+				txtName : jQuery("#txtName").val(),
+				txtEmail : jQuery("#txtEmail").val(), //Get by Id
+				txtMobile : jQuery("#txtMobile").val(),
+				txtAddress : jQuery("#txtAddress").val(),
+			};
+			
+			//$ === jQuery
+			jQuery.ajax({
+				url : "/place-order",
+				type : "POST",
+				contentType: "application/json",
+				data : JSON.stringify(data),
+				dataType : "json", //Kieu du lieu tra ve tu controller la json
+				
+				success : function(jsonResult) {
+					alert(jsonResult.code + ": " + jsonResult.message);
+					//$("#placeOrderSuccess").html(jsonResult.message);
+				},
+				
+				error : function(jqXhr, textStatus, errorMessage) {
+					alert("An error occur");
+				}
+			});
+		}
+	</script>
 <script>
     
     const provinceSelect = document.getElementById('provinceSelect');
