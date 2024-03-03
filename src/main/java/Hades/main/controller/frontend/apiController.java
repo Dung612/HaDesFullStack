@@ -12,17 +12,21 @@ import Hades.main.dto.jw27Constant;
 import Hades.main.model.Product;
 import Hades.main.service.ProductService;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 @RestController
-@RequestMapping("/api")
-public class apiController extends BaseController implements jw27Constant {
+public class apiController {
 
-    @Autowired
-    private ProductService productService;
+	@Autowired
+	private ProductService productService;
 
-    @GetMapping("/data")
-    public List<Product> getData() {
-        // Lấy danh sách sản phẩm từ productService
-        List<Product> productList = productService.findAllActive();
-        return productList;
+    public apiController(ProductService productService) {
+        this.productService = productService;
+    }
+
+    @GetMapping("/api/products")
+    public List<Product> getAllProducts() {
+        return productService.findAllActive();
     }
 }

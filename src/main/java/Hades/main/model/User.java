@@ -1,6 +1,7 @@
 package Hades.main.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -13,14 +14,18 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import Hades.main.model.Role;
 
 @Entity
 @Table(name = "tbl_user")
-public class User extends BaseModel{
+public class User extends BaseModel implements UserDetails{
 	@Column(name = "username", length = 120, nullable = false)
 	private String username;
 	
@@ -54,7 +59,7 @@ public class User extends BaseModel{
 	
 	// Add and remove element out of relational user-role list
 	public void addRelationalUserRole(Role role) {
-		role.getUsers().add(this);
+		role.getUsers().add(this); 
 		roles.add(role);
 	}
 	
@@ -62,6 +67,47 @@ public class User extends BaseModel{
 		role.getUsers().remove(this);
 		roles.remove(role);
 	}
+	
+	// Mapping many-to-one: tbl_role-to-tbl_user (for create category)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "create_by")
+	private User userCreateUser;
+	
+	public User getUserCreateUser() {
+		return userCreateUser;
+	}
+
+	public void setUserCreateUser(User userCreateUser) {
+		this.userCreateUser = userCreateUser;
+	}
+
+	public User getUserUpdateUser() {
+		return userUpdateUser;
+	}
+
+	public void setUserUpdateUser(User userUpdateUser) {
+		this.userUpdateUser = userUpdateUser;
+	}
+
+	public Set<Product> getUserCreateProducts() {
+		return userCreateProducts;
+	}
+
+	public void setUserCreateProducts(Set<Product> userCreateProducts) {
+		this.userCreateProducts = userCreateProducts;
+	}
+
+	public Set<Product> getUserUpdateProducts() {
+		return userUpdateProducts;
+	}
+
+	public void setUserUpdateProducts(Set<Product> userUpdateProducts) {
+		this.userUpdateProducts = userUpdateProducts;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "update_by")
+	private User userUpdateUser;
 	
 /*------------------------------------------------------------------------------------------------------*/	
 	// Mapping one-to-many: tbl_user-to-tbl_category (user create category)
@@ -232,5 +278,35 @@ public class User extends BaseModel{
 
 	public void setUserUpdateCategories(Set<Category> userUpdateCategories) {
 		this.userUpdateCategories = userUpdateCategories;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return this.roles;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }

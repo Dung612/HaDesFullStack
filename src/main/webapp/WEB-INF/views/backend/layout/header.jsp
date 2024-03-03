@@ -12,20 +12,7 @@
             <div class="navbar-brand">
                 <!-- Logo icon -->
                 <a href="index.html">
-                    <b class="logo-icon">
-                        <!-- Dark Logo icon -->
-                        <img src="${classpath }/backend/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
-                        <!-- Light Logo icon -->
-                        <img src="${classpath }/backend/assets/images/logo-icon.png" alt="homepage" class="light-logo" />
-                    </b>
-                    <!--End Logo icon -->
-                    <!-- Logo text -->
-                    <span class="logo-text">
-                        <!-- dark Logo text -->
-                        <img src="${classpath }/backend/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
-                        <!-- Light Logo text -->
-                        <img src="${classpath }/backend/assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
-                    </span>
+                    <img src="${classpath}/frontend/accsents/accsent/image/logo_menu_no_scroll.webp" alt="" style="width: 200px" height="auto">
                 </a>
             </div>
             <!-- ============================================================== -->

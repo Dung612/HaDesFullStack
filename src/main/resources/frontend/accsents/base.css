@@ -31,7 +31,7 @@ body{
     left: 0;
     width: 100%;
     transition: background-color 0.3s ease;
-    z-index: 10000;
+    z-index: 100;
 }
 .nav{
   
@@ -105,12 +105,12 @@ select{
 
 
 .menu li:hover {
-    background-image: url(./accsent/img/269858510_400978881784237_2773069039765727977_n_1dec697e894b44028881c14c6507f7d8.webp
+    background-image: url(/frontend/accsents/accsent/image/269858510_400978881784237_2773069039765727977_n_1dec697e894b44028881c14c6507f7d8.webp
     );
     background-size: 30px 20px;
     background-repeat: no-repeat;
     color: black;
-    
+     z-index: 10000; 
     
     
 }
@@ -750,4 +750,11 @@ i{
     display: flex;
     width: 100%;
     justify-content: space-evenly;
+}
+#price-decor {
+    background-image: url('https://file.hstatic.net/1000306633/file/111_ae69cf24dc964f258349efab9c4ae975.png') !important;
+    background-size: 100px 24px;
+    background-repeat: no-repeat;
+    color: rgba(0, 0, 0, 0.438);
+     background-position: center;
 }

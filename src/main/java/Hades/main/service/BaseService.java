@@ -71,5 +71,15 @@ public abstract class BaseService<E extends BaseModel> {
 	}
 	
 	//get entity
+	public E getEntityByNativeSQL(String sql) {
+		
+		List<E> list = executeNativeSql(sql);
+		if (list.size() > 0) {
+			return list.get(0);
+			
+		} else {
+			return null;
+		}
+	}
 	
 }

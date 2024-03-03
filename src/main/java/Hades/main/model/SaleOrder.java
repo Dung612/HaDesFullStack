@@ -36,11 +36,10 @@ public class SaleOrder extends BaseModel{
 	@Column(name = "customer_address", length = 300, nullable = true)
 	private String customerAddress;
 	
-//	/*------------- Mapping One-to-Many: tbl_sale_order-to-tbl_user ----------------*/
-//    @OneToMany(fetch = FetchType.EAGER)
-//    private List<User> userList;
+
+
 	
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER )
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     
@@ -99,6 +98,7 @@ public class SaleOrder extends BaseModel{
 		//this.userList = userList;
 		this.userCreateSaleOrder = userCreateSaleOrder;
 		this.userUpdateSaleOrder = userUpdateSaleOrder;
+		
 	}
 
 	public String getCode() {

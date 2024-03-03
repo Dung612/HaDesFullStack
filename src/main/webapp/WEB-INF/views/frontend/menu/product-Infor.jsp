@@ -21,7 +21,8 @@
 <body>
 <!-- header -->
   <jsp:include page="/WEB-INF/views/frontend/layout/header.jsp"></jsp:include>
-    <div class="productContent"><form class="form-inline" action="${classpath }/product-detail" method="get">
+    <div class="productContent">
+    <form class="form-inline" action="${classpath }/product-detail" method="get">
          <div class="ContentInfor"> 
             <div class="infors">
                     <div class="infor">
@@ -50,42 +51,77 @@
                  <div class="PayProduct">
                      <div class="ContentPay">
                          <div class="name"><h2>${product.name }</h2></div>
-                         <div class="price"> <fmt:formatNumber value="${product.price }" minFractionDigits="0"></fmt:formatNumber><sup>vnđ</sup>
+             <c:choose>
+        		<c:when test="${not empty product.salePrice}">
+        		<div style="display: flex; justify-content: left;">
+                		 <div id="price-decor" style="padding-right: 20px;"> <span style="color: rgb(201, 35, 35); font-style: italic; font-size: 17px;">sale</span>
+                		  <span style="margin-left: 12px; "><fmt:formatNumber value="${product.price }" minFractionDigits="0"></fmt:formatNumber><sup>vnđ</sup></span> </div>
+            			<div class="price "><fmt:formatNumber value="${product.salePrice }" minFractionDigits="0"></fmt:formatNumber><sup>vnđ</sup> </div>
                 </div>
+                </c:when>
+		        <c:otherwise>
+		            <div class="price"><fmt:formatNumber value="${product.price }" minFractionDigits="0"></fmt:formatNumber><sup>vnđ</sup></div>
+		        </c:otherwise>
+		    </c:choose>
                          <div class="size">
                          <h4>kích thước</h4>
-                         <div class="btnsize">
-                             <button class="btnsizes " data-size="S">S</button>
-                             <button class="btnsizes selected" data-size="M">M</button>
-                             <button class="btnsizes" data-size="L">L</button>
-                         </div>
+                         <select id="sizeSelect" name="Size" style="width: 100%;text-align: center;height: 40px;">
+							    <c:choose>
+						        <c:when test="${product.category.id == '3'}">
+						            <!-- Hiển thị tùy chọn "Over Size" nếu categoryId là 3 -->
+						            <option value="oversize" selected>Over Size</option>
+						        </c:when>
+						        <c:otherwise>
+						            <!-- Hiển thị các tùy chọn "S", "M", "L" nếu categoryId không phải là 3 -->
+						            <option value="S">S</option>
+						            <option value="M">M</option>
+						            <option value="L">L</option>
+						        </c:otherwise>
+						    </c:choose>
+						</select>
                      </div>
-                     <div class=" btnadd" onclick="showCart()" >THÊM VÀO GIỎ</div>
-                     <div class=" btnpay" onclick="redirectToThanhToan()">MUA NGAY</div>
+                     <div class=" btnadd" onclick="addToCart(${product.id}, 1,$('#sizeSelect').val(), '${product.name}') , reloadPageAndShowCart()  " >THÊM VÀO GIỎ</div>
+                     <div class=" btnpay" onclick="addToCart(${product.id}, 1, '${product.name }') ,redirectToThanhToan()">MUA NGAY</div>
                      </div>
                  </div>
          </div> 
 </form>
     </div>
     <div class="RelatedProduct">
-        <h2>SẢN PHẨM LIÊN QUAN</h2>
-        <div class="sanpham">
-            <!-- <div class="sanpham1 col4s fontbasic">
-                <div class="anhsanpham">
-                    <img src="${classpath}/frontend/accsents/accsent/img/dsc05233_f4651fc12ce24ac28d00ff705d483daf_grande.webp" alt="">
-                    <img class="anh2" src="${classpath}/frontend/accsents/accsent/img/hd_thang_8.webp" alt="">
-                    <div class="chucnang">
-                        <div class="buy"><a href="">MUA NGAY</a></div>
-                        <div class="add"><a href="">THÊM VÀO GIỎ</a></div>
-                    </div>
-                
-                
+        <h2>SẢN PHẨM BÁN CHẠY</h2>
+		<form  method="get">
+		    <div class="sanpham">
+		    
+		<c:forEach items="${products}" var="product">
+		   
+		        <div class="sanpham1 col4s fontbasic">
+		            <div class="anhsanpham">
+		                <img src="${classpath}/FileUploads/${product.avatar}" alt="">
+		                <a class="image-link" href="${classpath}/product-detail/${product.id}"></a>
+		                <img class="anh2" src="${classpath}/FileUploads/${product.avatar2}" alt="">
+		                <div class="chucnang">
+		                    <div class="buy" onclick="addToCart(${product.id}, 1,'M', '${product.name}') ,redirectToThanhToan()">MUA NGAY</div>
+		                    <div class="add" onclick="addToCart(${product.id}, 1,'M', '${product.name}') , reloadPageAndShowCart()">THÊM VÀO GIỎ</div>
+		                </div>
+		            </div>
+		            <div class="tensanpham"><a href="${classpath}/product-detail/${product.id}">${product.name}</a></div>
+		            <c:choose>
+        		<c:when test="${not empty product.salePrice}">
+        		<div style="display: flex; justify-content: center;">
+                		 <div id="price-decor" style="padding-right: 20px;"> <span style="color: rgb(201, 35, 35); font-style: italic; font-size: 17px;">sale</span>
+                		  <span style="margin-left: 12px; "><fmt:formatNumber value="${product.price }" minFractionDigits="0"></fmt:formatNumber><sup>vnđ</sup></span> </div>
+            			<div class="price "><fmt:formatNumber value="${product.salePrice }" minFractionDigits="0"></fmt:formatNumber><sup>vnđ</sup> </div>
                 </div>
-                <div class="tensanpham"><a href="">OCEAN MEDITATION BOXY TEE</a></div>
-                <div class="price">420,000 <span>đ</span></div>
-            </div>
-    
-     -->  </div>
+                </c:when>
+        <c:otherwise>
+            <div class="price"><fmt:formatNumber value="${product.price }" minFractionDigits="0"></fmt:formatNumber><sup>vnđ</sup></div>
+        </c:otherwise>
+    </c:choose>
+		        </div>
+		    
+		</c:forEach>
+		    </div>
+		</form>
 
 
     </div>
@@ -199,48 +235,48 @@
     <div class="slideshowfooter">
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         
         
     </div>
     <div class="heart">
         <div class="boderheart">
-            <a href=""><i class="fa-solid fa-heart"></i></a>
+            <a href="https://www.facebook.com/hadesvietnam/"><i class="fa-solid fa-heart"></i></a>
         </div>
     </div>
 
     <div class="messenger">
         <div class="bodermessenger">
-            <a href=""><i class="fa-brands fa-facebook-messenger"></i></a>
+            <a href="https://www.facebook.com/messages/t/1489313121348883"><i class="fa-brands fa-facebook-messenger"></i></a>
         </div>
     </div>
 
@@ -268,7 +304,62 @@
 <script>
 
 
+function reloadPageAndShowCart() {
+    // Lưu trạng thái reloadCalled vào localStorage
+    localStorage.setItem('reloadCalled', 'true');
+    
+    // Tải lại trang sau độ trễ
+    setTimeout(function() {
+        location.reload();
+    }, 200);
+}
 
+// Gọi showCart() sau khi trang đã tải hoàn toàn
+window.addEventListener('load', function() {
+    // Kiểm tra nếu reloadCalled đã được set trong localStorage
+    var reloadCalled = localStorage.getItem('reloadCalled');
+    if (reloadCalled === 'true') {
+        showCart(); // Chỉ gọi showCart() nếu reloadPageAndShowCart() đã được gọi
+        // Xóa trạng thái reloadCalled khỏi localStorage
+        localStorage.removeItem('reloadCalled');
+    }
+});
 
 </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<!-- Add to cart -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<!-- Add to cart -->
+	<script type="text/javascript">
+		addToCart = function(_productId, _quantity, _Size, _productName) {		
+			//alert("Thêm "  + _quantity + " sản phẩm '" + _productName + "' vào giỏ hàng ");
+			let data = {
+				productId: _productId, //lay theo id
+				quantity: _quantity,
+				size: _Size
+				
+			};
+				
+			//$ === jQuery
+			jQuery.ajax({
+				url : "/add-to-cart",
+				type : "POST",
+				contentType: "application/json",
+				data : JSON.stringify(data),
+				dataType : "json", //Kieu du lieu tra ve tu controller la json
+				
+				success : function(jsonResult) {
+					
+					let totalProducts = jsonResult.totalCartProducts;
+					$("#totalCartProductsId").html(totalProducts);
+					
+				},
+				
+				error : function(jqXhr, textStatus, errorMessage) {
+					alert(jsonResult.code + ': Đã có lỗi xay ra...!')
+				}
+			});
+		}
+	</script>
+	</script>
 </html>

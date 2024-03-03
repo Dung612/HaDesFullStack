@@ -7,6 +7,7 @@ public class ProductCart {
 	
 	private int productId;
 	private BigInteger quantity;
+	private String Size;
 	private String productName;
 	private String avatar;
 	private BigDecimal price;
@@ -19,18 +20,30 @@ public class ProductCart {
 		}return this.price.multiply(new BigDecimal(this.quantity));
 		
 	}
-	public ProductCart(int productId, BigInteger quantity, String productName, String avatar, BigDecimal price) {
-		super();
-		this.productId = productId;
-		this.quantity = quantity;
-		this.productName = productName;
-		this.avatar = avatar;
-		this.price = price;
-	}
+
 	public ProductCart() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	public String getSize() {
+		return Size;
+	}
+
+	public void setSize(String size) {
+		Size = size;
+	}
+
+	public ProductCart(int productId, BigInteger quantity, String size, String productName, String avatar,
+			BigDecimal price) {
+		super();
+		this.productId = productId;
+		this.quantity = quantity;
+		this.Size = size;
+		this.productName = productName;
+		this.avatar = avatar;
+		this.price = price;
+	}
+
 	public int getProductId() {
 		return productId;
 	}

@@ -11,12 +11,15 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
 
 
 @Entity
 @Table(name = "tbl_role")
-public class Role extends BaseModel{
+public class Role extends BaseModel implements GrantedAuthority{
 	@Column(name = "name", length = 200, nullable = false)
 	private String name;
 	
@@ -33,6 +36,30 @@ public class Role extends BaseModel{
 	public Role() {
 		super();
 	}
+	// Mapping many-to-one: tbl_role-to-tbl_user (for create category)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "create_by")
+	private User userCreateRole;
+
+	public User getUserCreateRole() {
+		return userCreateRole;
+	}
+
+	public void setUserCreateRole(User userCreateRole) {
+		this.userCreateRole = userCreateRole;
+	}
+
+	public User getUserUpdateRole() {
+		return userUpdateRole;
+	}
+
+	public void setUserUpdateRole(User userUpdateRole) {
+		this.userUpdateRole = userUpdateRole;
+	}
+	// Mapping many-to-one: tbl_role-to-tbl_user (for update category)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "update_by")
+	private User userUpdateRole;
 
 	public Role(Integer id, Date createDate, Date updateDate, Boolean status, String name, String description,
 			List<User> users) {
@@ -64,5 +91,11 @@ public class Role extends BaseModel{
 
 	public void setUsers(List<User> users) {
 		this.users = users;
+	}
+	
+	@Override
+	public String getAuthority() {
+		// TODO Auto-generated method stub
+		return this.name;
 	}
 }

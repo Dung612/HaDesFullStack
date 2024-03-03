@@ -16,9 +16,7 @@ public class CategoryService extends BaseService<Category> {
 		// TODO Auto-generated method stub
 		return Category.class;
 	}
-	public List<Category> findAllActive(){
-		return super.executeNativeSql("SELECT * FROM tbl_category WHERE status=1");
-	}
+
 	@Transactional
 	public void deleteCategoryById(int id) {
 		super.deleteById(id);

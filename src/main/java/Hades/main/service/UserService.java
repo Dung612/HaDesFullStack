@@ -16,12 +16,20 @@ public class UserService extends BaseService<User> {
 		return User.class;
 	}
 	
-	public List<User> findAllActive() {
+	public List<User> findAllUserActive() {
 		return super.executeNativeSql("SELECT * FROM tbl_user WHERE status=1");
+	}
+	public List<User> findAllUser() {
+		return super.executeNativeSql("SELECT * FROM tbl_user");
 	}
 	
 	@Transactional
 	public void deleteUserById(int id) {
 		super.deleteById(id);
+	}
+	@Transactional
+	public void inactiveUser(User user) {
+		super.saveOrUpdate(user);
+		
 	}
 }

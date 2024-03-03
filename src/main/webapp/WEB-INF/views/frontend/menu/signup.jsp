@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
+	
+	<!-- directive của JSTL -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+	
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,24 +27,31 @@
 
     <div class="loginfont">
             <div class="login">
+            
                 <h2>ĐĂNG KÝ</h2>
-                <input type="text" placeholder="Họ">
-                <input type="text" placeholder="Tên">
-                <div class="gioitinh">
-                    <input type="radio" name="option" value="gtnam" id="gtnam"> <span>Nam</span>
-                    <input type="radio" name="option" value="gtnu" id="gtnu"> <span>Nữ</span>
+                <form action="${classpath }/register" method="post">
+                <input type="text" id="username" name="username" placeholder="Tài Khoản" >
+                <input  type="text" id="mobile" name = "mobile" placeholder="Số Điện Thoại">
+                
+                
+                <input type="email" id="email" name="email" placeholder="Email">
+                <input type="text" id="name" name="name" placeholder="Họ Và Tên">
+                <input  type="password" id="password" name="password" placeholder="Mật Khẩu">
+                <input type="password" id="retypepassword" name = "retypepassword" placeholder="Nhập Lại Mật Khẩu">
+				
+                <div class="loginbtn" id="loginbtn" >
+                    <button id="btnlogin" type="submit"  ><span>Đăng Ký</span></button>
                 </div>
-                <input type="text" placeholder="mm/dd/yy">
-                <input type="text" placeholder="Email">
-                <input type="text" placeholder="Mật Khẩu">
+                </form>
 
-                <div class="loginbtn">
-                    <button id="btnlogin"><span>Đăng Ký</span></button>
-                </div>
-
-                <a href="${classpath}/frontend/accsents/index.html" ><i class="fa-solid fa-arrow-left-long"></i> Quay Lại Trang Chủ</a>
+                <a href="${classpath}/index.html" ><i class="fa-solid fa-arrow-left-long"></i> Quay Lại Trang Chủ</a>
             </div>
     </div>
+    <script>
+    document.getElementById("loginbtn").addEventListener("click", function() {
+        document.getElementById("btnlogin").click();
+    });
+</script>
 
     
 
@@ -152,48 +165,48 @@
     <div class="slideshowfooter">
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         
         
     </div>
     <div class="heart">
         <div class="boderheart">
-            <a href=""><i class="fa-solid fa-heart"></i></a>
+            <a href="https://www.facebook.com/hadesvietnam/"><i class="fa-solid fa-heart"></i></a>
         </div>
     </div>
 
     <div class="messenger">
         <div class="bodermessenger">
-            <a href=""><i class="fa-brands fa-facebook-messenger"></i></a>
+            <a href="https://www.facebook.com/messages/t/1489313121348883"><i class="fa-brands fa-facebook-messenger"></i></a>
         </div>
     </div>
 

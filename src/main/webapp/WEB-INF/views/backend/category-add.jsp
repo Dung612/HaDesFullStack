@@ -17,7 +17,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="${classpath}/backend/assets/images/favicon.png">
+    <link rel="shortcut icon" href="//theme.hstatic.net/1000306633/1000891824/14/favicon.png?v=587" type="image/png">>
     <title>${title }</title>
     
     <!-- variables -->

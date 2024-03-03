@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import Hades.main.dto.SearchModel;
 import Hades.main.dto.jw27Constant;
+import Hades.main.model.Category;
 import Hades.main.model.Product;
 import Hades.main.model.ProductImage;
 
@@ -37,6 +38,16 @@ public class ProductService extends BaseService<Product> implements jw27Constant
 		 return super.executeNativeSql("SELECT * FROM tbl_product WHERE status = 1 AND category_id = " + categoryId);
 	}
 	
+	public List<Product> findAllActiveIsHot() {
+		return super.executeNativeSql("SELECT * FROM tbl_product WHERE status = 1 AND is_hot = 1");
+	}
+	
+	 
+	 
+	public List<Product> findNewProduct() {
+	    return super.executeNativeSql("SELECT * FROM tbl_product p WHERE p.status=1 ORDER BY p.id DESC LIMIT 12");
+	}
+
 	
 	public void deleteProductId(int id) {
 		super.deleteById(id);
@@ -79,7 +90,7 @@ public class ProductService extends BaseService<Product> implements jw27Constant
 		////fixxx
 		if (isUploadFile(avatarFile2)) {
 			//luu file vaoo thu muc product/Avatar2
-			String path = FOLDER_UPLOAD + "Product/Avatar2/" + avatarFile.getOriginalFilename();
+			String path = FOLDER_UPLOAD + "Product/Avatar2/" + avatarFile2.getOriginalFilename();
 			File file = new File(path);
 			avatarFile2.transferTo(file);
 			//luu duong dan vao bang tbl product
@@ -263,6 +274,66 @@ public class ProductService extends BaseService<Product> implements jw27Constant
 		return super.executeNativeSql(sql);
 		
 	}
+	
+	public List<Product> searchProductFe(SearchModel productSearch) {
+		//tao cau lenh sql
+		 String sql = "SELECT * FROM tbl_product p WHERE 1=1";
+
+		    // Tìm kiếm theo tiêu chí status
+		    if (productSearch.getStatus() == 0) { 
+		        sql += " ORDER BY COALESCE(p.sale_price, p.price) ASC";
+		    }
+		    if (productSearch.getStatus() == 1) { 
+		        sql += " ORDER BY COALESCE(p.sale_price, p.price) DESC";
+		    }
+		if (productSearch.getStatus() == 2) { 
+			
+			sql += " ORDER BY p.id ASC" ;
+		}
+		if (productSearch.getStatus() == 3) { 
+			
+			sql += " ORDER BY p.id DESC" ;
+		}
+		if (productSearch.getStatus() == 4) { 
+			
+			sql += " AND p.is_hot=1" ;
+		}
+		
+		return super.executeNativeSql(sql);
+		
+	}
+	
+	public List<Product> searchProductAndCategoryFe(SearchModel productSearch , long category) {
+		//tao cau lenh sql
+		String sql = "SELECT * FROM tbl_product p WHERE 1=1 AND p.category_id = " + category;
+		//tim kiem voi tieu chi status
+		if (productSearch.getStatus() == 0) { 
+	        sql += " ORDER BY COALESCE(p.sale_price, p.price) ASC";
+	    }
+	    if (productSearch.getStatus() == 1) { 
+	        sql += " ORDER BY COALESCE(p.sale_price, p.price) DESC";
+	    }
+		if (productSearch.getStatus() == 2) { 
+			
+			sql += " ORDER BY p.id ASC" ;
+		}
+		if (productSearch.getStatus() == 3) { 
+			
+			sql += " ORDER BY p.id DESC" ;
+		}
+		if (productSearch.getStatus() == 4) { 
+			
+			sql += " AND p.is_hot=1" ;
+		}
+		
+		return super.executeNativeSql(sql);
+		
+	}
+
+	public List<Product> saleProduct() {
+	    return super.executeNativeSql("SELECT * FROM tbl_product WHERE status = 1 AND sale_price IS NOT NULL");
+	}
+
 
 
 

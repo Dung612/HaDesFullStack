@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
+	
+	<!-- directive của JSTL -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,21 +23,40 @@
   <jsp:include page="/WEB-INF/views/frontend/layout/header.jsp"></jsp:include>
 
     <!-- content dang nhap -->
-
+   
     <div class="loginfont" >
+
             <div class="login " >
                 <h2>ĐĂNG NHẬP</h2>
-                Tài Khoản<span class="red">*</span><input type="text" id="username" name="username" required>
-                Mật Khẩu<span class="red">*</span><input type="password" id="password" name="password" required>
+                 <form method="POST" action="${classpath }/login_processing_url" >
+                 <c:if test="${not empty param.login_error }">
+						<div class="alert alert-danger" role="alert">
+							Login attempt was not successful, try again!!!</div>
+				</c:if>
+                Tài Khoản<span class="red">*</span><input  type="text" id="username"  name="username" required>
+                Mật Khẩu<span class="red">*</span><input type="password" id="password"  name="password" required>
                 <div class="error"></div>
-                <div class="loginbtn">
-                    <button id="btnlogin"><span>Đăng Nhập</span></button>
+                
+                <div class="loginbtn"  id="loginbtn">
+                
+                    <div id="btnlogin" ><span>Đăng Nhập</span></div>
                     
                 </div>
+                <button type="submit" id="btnhiden" style="display: hiden;"></button>
+                
+                 </form>
                 <a href="">Quên mật khẩu</a>
                 <a href="/signup">Đăng ký</a>
             </div>
+            
     </div>
+   
+<script>
+    document.getElementById("loginbtn").addEventListener("click", function() {
+        document.getElementById("btnhiden").click();
+        
+    });
+</script>
 
     
 
@@ -146,48 +170,48 @@
     <div class="slideshowfooter">
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         
         
     </div>
     <div class="heart">
         <div class="boderheart">
-            <a href=""><i class="fa-solid fa-heart"></i></a>
+            <a href="https://www.facebook.com/hadesvietnam/"><i class="fa-solid fa-heart"></i></a>
         </div>
     </div>
 
     <div class="messenger">
         <div class="bodermessenger">
-            <a href=""><i class="fa-brands fa-facebook-messenger"></i></a>
+            <a href="https://www.facebook.com/messages/t/1489313121348883"><i class="fa-brands fa-facebook-messenger"></i></a>
         </div>
     </div>
 
@@ -195,20 +219,5 @@
     
 </body>
 <script src="${classpath}/frontend/accsents/base.js"></script>
-<script>
-    const error = document.querySelector('.error')
-    document.querySelector(".loginbtn").addEventListener("click", function(event) {
-      event.preventDefault(); // Ngăn chuyển hướng mặc định của nút
-      
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
 
-      if (username === "admin" && password === "admin") {
-        
-        window.location.href = "/admin/home";
-      } else {
-        error.textContent = "Sai tài khoản hoặc mật khẩu. Vui lòng thử lại.";
-      }
-    });
-  </script>
 </html>

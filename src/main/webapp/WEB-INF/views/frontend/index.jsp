@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HADES STUDIO</title>
     <link rel="stylesheet" href="${classpath}/frontend/accsents/base.css">
+        <link rel="stylesheet" href="${classpath}/frontend/accsents/shop.css">
     <link rel="stylesheet" href="${classpath}/frontend/accsents/style.css">
     <link rel="stylesheet" href="${classpath}/frontend/accsents/reponsive.css">
     <link rel="stylesheet" href="${classpath}/frontend/accsents/fontawesome-free-6.4.0-web/css/all.min.css">
@@ -22,11 +23,11 @@
   	<jsp:include page="/WEB-INF/views/frontend/layout/header.jsp"></jsp:include>
     <div class="slide">
         <div class="slideshow ">
-            <img src="https://theme.hstatic.net/1000306633/1000891824/14/slideshow_1.jpg?v=662" alt="">
+            <img src="https://theme.hstatic.net/1000306633/1001194548/14/slideshow_2.jpg?v=161" alt="">
             <img src="https://theme.hstatic.net/1000306633/1000891824/14/slideshow_2.jpg?v=662" alt="">
-            <img src="https://theme.hstatic.net/1000306633/1000891824/14/slideshow_3.jpg?v=662" alt="">
+            <img src="https://theme.hstatic.net/1000306633/1001194548/14/slideshow_3.jpg?v=161" alt="">
             <img src="https://theme.hstatic.net/1000306633/1000891824/14/slideshow_2.jpg?v=662" alt="">
-            <img src="https://theme.hstatic.net/1000306633/1000891824/14/slideshow_1.jpg?v=662" alt="">
+            <img src="https://theme.hstatic.net/1000306633/1001194548/14/slideshow_2.jpg?v=161" alt="">
             
 
         </div>
@@ -36,10 +37,93 @@
         </div> -->
     </div>
     <div class="block-content">
-        <div class="content1" ><a href="./shop.html?categoryId=1"> <img src="https://theme.hstatic.net/1000306633/1000891824/14/block_home_category1_new.png?v=662" alt=""></a></div>
-        <div class="content2" style="margin: 0 4px;"> <a href="./shop.html?categoryId=2"> <img src="https://theme.hstatic.net/1000306633/1000891824/14/block_home_category2_new.png?v=662" alt=""></a> </div>
-        <div class="content3"> <a href="./shop.html?categoryId=4"> <img src="https://theme.hstatic.net/1000306633/1000891824/14/block_home_category3_new.png?v=662" alt=""></a></div>
+        <div class="content1" ><a href="shop/1"> <img src="https://theme.hstatic.net/1000306633/1000891824/14/block_home_category1_new.png?v=662" alt=""></a></div>
+        <div class="content2" style="margin: 0 4px;"> <a href="shop/2"> <img src="https://theme.hstatic.net/1000306633/1000891824/14/block_home_category2_new.png?v=662" alt=""></a> </div>
+        <div class="content3"> <a href="shop/4"> <img src="https://theme.hstatic.net/1000306633/1000891824/14/block_home_category3_new.png?v=662" alt=""></a></div>
     </div>
+    <img style="width: 100%; height: auto;"  alt="" src="https://theme.hstatic.net/1000306633/1001194548/14/show_block_home_category_image_3_new.png?v=161">
+    
+    
+        <div class="textslideshow">
+        <div class="textslide">
+            <span>
+                <p>NEW ARRIVALS</p>
+            </span>
+        </div>
+        <div class="textslide">
+            <span>
+                <p>NEW ARRIVALS</p>
+            </span>
+        </div>
+        <div class="textslide">
+            <span>
+                <p>NEW ARRIVALS</p>
+            </span>
+        </div>
+        <div class="textslide">
+            <span>
+                <p>NEW ARRIVALS</p>
+            </span>
+        </div>
+        <div class="textslide">
+            <span>
+                <p>NEW ARRIVALS</p>
+            </span>
+        </div>
+        <div class="textslide">
+            <span>
+                <p>NEW ARRIVALS</p>
+            </span>
+        </div>
+        <div class="textslide">
+            <span>
+                <p>NEW ARRIVALS</p>
+            </span>
+        </div>
+        <div class="textslide">
+            <span>
+                <p>NEW ARRIVALS</p>
+            </span>
+        </div>
+        
+
+    </div>
+    
+    
+        <div class="sanpham">
+    
+    	<c:forEach items="${productnew }" var="product">
+         <div class="sanpham1 col4s fontbasic">
+            <div class="anhsanpham">
+                <img src="${classpath }/FileUploads/${product.avatar }" alt="">
+                <a class="image-link" href="${classpath }/product-detail/${product.id}"></a>
+                <img class="anh2" src="${classpath }/FileUploads/${product.avatar2 }" alt="">
+                <div class="chucnang">
+                    <div class="buy" onclick="addToCart(${product.id}, 1,'M', '${product.name }') ,redirectToThanhToan()">MUA NGAY</div>
+                    <div class="add" onclick="addToCart(${product.id}, 1,'M', '${product.name }') , reloadPageAndShowCart()  " >THÊM VÀO GIỎ</div>
+                </div>
+                </div>
+                <div class="tensanpham"><a href="${classpath }/product-detail/${product.id}">${product.name }</a></div>
+         <c:choose>
+        		<c:when test="${not empty product.salePrice}">
+        		<div style="display: flex; justify-content: center;">
+                		 <div id="price-decor" style="padding-right: 20px;"> <span style="color: rgb(201, 35, 35); font-style: italic; font-size: 17px;">sale</span>
+                		  <span style="margin-left: 12px; "><fmt:formatNumber value="${product.price }" minFractionDigits="0"></fmt:formatNumber><sup>vnđ</sup></span> </div>
+            			<div class="price "><fmt:formatNumber value="${product.salePrice }" minFractionDigits="0"></fmt:formatNumber><sup>vnđ</sup> </div>
+                </div>
+                </c:when>
+        <c:otherwise>
+            <div class="price"><fmt:formatNumber value="${product.price }" minFractionDigits="0"></fmt:formatNumber><sup>vnđ</sup></div>
+        </c:otherwise>
+    </c:choose>
+                </div>
+       
+
+ 	</c:forEach>
+    </div>
+    
+    
+    
     <div class="textslideshow">
         <div class="textslide">
             <span>
@@ -150,35 +234,35 @@
     <div class="slideshowfooter">
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         
         

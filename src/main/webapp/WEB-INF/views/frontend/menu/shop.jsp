@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="${classpath}/frontend/accsents/base.css">
     <link rel="stylesheet" href="${classpath}/frontend/accsents/shop.css">
     <link rel="stylesheet" href="${classpath}/frontend/accsents/reponsive.css">
+    <link href="${classpath}/backend/dist/css/simplePagination.css" rel="stylesheet">
     <link rel="stylesheet" href="${classpath}/frontend/accsents/fontawesome-free-6.4.0-web/css/all.min.css">
 </head>
 <body>
@@ -22,20 +23,40 @@
    <jsp:include page="/WEB-INF/views/frontend/layout/header.jsp"></jsp:include>
 
     <!-- content shop -->
+    <script>
+    // Lấy đường dẫn hiện tại của URL
+    var currentUrl = window.location.href;
 
+    // Tách phần số ở cuối đường dẫn 
+    var categoryId = currentUrl.substring(currentUrl.lastIndexOf('/') + 1);
+
+    // Cập nhật action của form với categoryId đã lấy được
+    var form = document.getElementById('shopForm');
+    form.action = "/shop/" + categoryId;
+</script>
+<form id="shopForm"  method="get">
     <div class="selec">
-        <select name="" id="sortSelect"> 
+        <select name="status" id="sortSelect"> 
             
-            <option value="increase">GIÁ: TĂNG DẦN</option>
-            <option value="decrease">GIÁ: GIẢM DẦN</option>
-            <option value="oldest">CŨ NHẤT </option>
-            <option value="newest">MỚI NHẤT</option>
-            <option value="bestseller">BÁN CHẠY NHẤT</option>
+            <option value="0">GIÁ: TĂNG DẦN</option>
+            <option value="1">GIÁ: GIẢM DẦN</option>
+            <option value="2">CŨ NHẤT </option>
+            <option value="3">MỚI NHẤT</option>
+            <option value="4">BÁN CHẠY NHẤT</option>
             
         </select>
+        <button type="submit" id="btnSearch" name="btnSearch" class="btn btn-primary" style="display: none;">Search</button>
+        <input id="currentPage" name="currentPage" class="form-control"
+														value="${productSearch.currentPage }" style="display:none;">
+        <script type="text/javascript">
+        document.getElementById('sortSelect').addEventListener('change', function() {
+            document.getElementById('btnSearch').click();
+        });
+		</script>
+
     </div>
     <!-- danh muc san pham------------ --> 
-<form method="get">
+
     <div class="sanpham">
     
     	<c:forEach items="${products }" var="product">
@@ -45,17 +66,41 @@
                 <a class="image-link" href="${classpath }/product-detail/${product.id}"></a>
                 <img class="anh2" src="${classpath }/FileUploads/${product.avatar2 }" alt="">
                 <div class="chucnang">
-                    <div class="buy" onclick="redirectToThanhToan()">MUA NGAY</div>
-                    <div class="add" onclick="addToCart(${product.id}, 1, '${product.name }') , showCart()" >THÊM VÀO GIỎ</div>
+                <c:choose>
+						        <c:when test="${product.category.id == '3'}">
+						        <div class="buy" onclick="addToCart(${product.id}, 1,'oversize', '${product.name }') ,redirectToThanhToan()">MUA NGAY</div>
+                    <div class="add" onclick="addToCart(${product.id}, 1,'oversize', '${product.name }') , reloadPageAndShowCart()  " >THÊM VÀO GIỎ</div>
+						        </c:when>
+						        <c:otherwise>
+                    <div class="buy" onclick="addToCart(${product.id}, 1,'M', '${product.name }') ,redirectToThanhToan()">MUA NGAY</div>
+                    <div class="add" onclick="addToCart(${product.id}, 1,'M', '${product.name }') , reloadPageAndShowCart()  " >THÊM VÀO GIỎ</div>
+                     </c:otherwise>
+						    </c:choose>
                 </div>
                 </div>
                 <div class="tensanpham"><a href="${classpath }/product-detail/${product.id}">${product.name }</a></div>
-                <div class="price"><fmt:formatNumber value="${product.price }" minFractionDigits="0"></fmt:formatNumber><sup>vnđ</sup>
+         <c:choose>
+        		<c:when test="${not empty product.salePrice}">
+        		<div style="display: flex; justify-content: center;">
+                		 <div id="price-decor" style="padding-right: 20px;"> <span style="color: rgb(201, 35, 35); font-style: italic; font-size: 17px;">sale</span>
+                		  <span style="margin-left: 12px; "><fmt:formatNumber value="${product.price }" minFractionDigits="0"></fmt:formatNumber><sup>vnđ</sup></span> </div>
+            			<div class="price "><fmt:formatNumber value="${product.salePrice }" minFractionDigits="0"></fmt:formatNumber><sup>vnđ</sup> </div>
                 </div>
-        </div>
+                </c:when>
+        <c:otherwise>
+            <div class="price"><fmt:formatNumber value="${product.price }" minFractionDigits="0"></fmt:formatNumber><sup>vnđ</sup></div>
+        </c:otherwise>
+    </c:choose>
+                </div>
+       
 
  	</c:forEach>
     </div>
+    
+		<div class="pagination " style="display: flex; justify-content: center;">
+			<div id="paging"></div>
+		</div>
+	 
 </form>
 
     <!-- base bottom -->
@@ -167,48 +212,48 @@
     <div class="slideshowfooter">
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div class="textfooter">
             <p class="mess-text-title">SS23 MINI COLLECTION</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         <div  class="textfooter">
             <p class="mess-text-title">GET TO KNOW ABOUT OUR VIBE</p>
-            <span class="mess-text-sub">HADES™ 2023</span>
+            <span class="mess-text-sub">HADES™ 2024</span>
         </div>
         
         
     </div>
     <div class="heart">
         <div class="boderheart">
-            <a href=""><i class="fa-solid fa-heart"></i></a>
+            <a href="https://www.facebook.com/hadesvietnam/"><i class="fa-solid fa-heart"></i></a>
         </div>
     </div>
 
     <div class="messenger">
         <div class="bodermessenger">
-            <a href=""><i class="fa-brands fa-facebook-messenger"></i></a>
+            <a href="https://www.facebook.com/messages/t/1489313121348883"><i class="fa-brands fa-facebook-messenger"></i></a>
         </div>
     </div>
 
@@ -232,14 +277,41 @@
 <!-- <script src="${classpath}/frontend/accsents/test.js"></script> -->
 <!-- <script src="${classpath}/frontend/accsents/shop.js"></script> -->
 <!-- Jquery -->
+<script src="${classpath}/frontend/accsents/base.js"></script> 
+<script>
+
+
+function reloadPageAndShowCart() {
+    // Lưu trạng thái reloadCalled vào localStorage
+    localStorage.setItem('reloadCalled', 'true');
+    
+    // Tải lại trang sau độ trễ
+    setTimeout(function() {
+        location.reload();
+    }, 200);
+}
+
+// Gọi showCart() sau khi trang đã tải hoàn toàn
+window.addEventListener('load', function() {
+    // Kiểm tra nếu reloadCalled đã được set trong localStorage
+    var reloadCalled = localStorage.getItem('reloadCalled');
+    if (reloadCalled === 'true') {
+        showCart(); // Chỉ gọi showCart() nếu reloadPageAndShowCart() đã được gọi
+        // Xóa trạng thái reloadCalled khỏi localStorage
+        localStorage.removeItem('reloadCalled');
+    }
+});
+
+</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<!-- Add to cart -->
 	<script type="text/javascript">
-		addToCart = function(_productId, _quantity, _productName) {		
+		addToCart = function(_productId, _quantity, _Size, _productName) {		
 			//alert("Thêm "  + _quantity + " sản phẩm '" + _productName + "' vào giỏ hàng ");
 			let data = {
 				productId: _productId, //lay theo id
 				quantity: _quantity,
+				size: _Size
 				
 			};
 				
@@ -252,18 +324,106 @@
 				dataType : "json", //Kieu du lieu tra ve tu controller la json
 				
 				success : function(jsonResult) {
-					alert(jsonResult.code + ": " + jsonResult.message); 
+					
 					let totalProducts = jsonResult.totalCartProducts;
 					$("#totalCartProductsId").html(totalProducts);
+					
 				},
 				
 				error : function(jqXhr, textStatus, errorMessage) {
 					alert(jsonResult.code + ': Đã có lỗi xay ra...!')
-				},
+				}
 			});
 		}
 	</script>
-<script src="${classpath}/frontend/accsents/base.js"></script>  
+		<script type="text/javascript">
+		updateProductQuantity = function(_productId, _quantity,_Size) {
+			let data = {
+				productId : _productId, //lay theo id
+				quantity : _quantity,
+				size: _Size
+			};
+
+			//$ === jQuery
+			jQuery.ajax({
+				url : "/update-product-quantity",
+				type : "POST",
+				contentType : "application/json",
+				data : JSON.stringify(data),
+				dataType : "json", //Kieu du lieu tra ve tu controller la json
+
+				success : function(jsonResult) {
+					let totalProducts = jsonResult.totalCartProducts; 
+					//Viet lai so luong sau khi bam nut -, +
+					$("#productQuantity_" + jsonResult.productId).html(jsonResult.newQuantity); 
+				},
+
+				error : function(jqXhr, textStatus, errorMessage) {
+					alert("An error occur");
+				}
+			});
+		}
+	</script>
+		<script type="text/javascript">
+    removeFromCart = function(_productId, _Size) {		
+        let data = {
+            productId: _productId,
+            size: _Size
+        };
+            
+        //$ === jQuery
+        jQuery.ajax({
+            url : "/remove-from-cart",
+            type : "POST",
+            contentType: "application/json",
+            data : JSON.stringify(data),
+            dataType : "json",
+            
+            success : function(jsonResult) {
+                let totalProducts = jsonResult.totalCartProducts;
+                $("#totalCartProductsId").html(totalProducts);
+            },
+            
+            error : function(jqXhr, textStatus, errorMessage) {
+                alert(jsonResult.code + ': Đã có lỗi xảy ra...!')
+            }
+        });
+    }
+</script>
+<script src="${classpath}/backend/dist/js/jquery.simplePagination.js"></script>
+
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			//Dat gia tri cua status ung voi dieu kien search truoc do
+			$("#sortSelect").val(${productSearch.status});
+			
+			
+			$("#paging").pagination({
+				currentPage: ${productSearch.currentPage}, //Trang hien tai
+				items: ${productSearch.totalItems}, //Tong so san pham (total products)
+				itemsOnPage: ${productSearch.sizeOfPage},
+				cssStyle: 'light-theme',
+				onPageClick: function(pageNumber, event) {
+					$('#currentPage').val(pageNumber);
+					$('#btnSearch').trigger('click');
+				},
+			});
+		});
+	</script>
+	<script type="text/javascript">
+	$.ajax({
+	    url: '/api/products',
+	    type: 'GET',
+	    success: function(products) {
+	        // Xử lý danh sách sản phẩm ở đây
+	        console.log(products);
+	    },
+	    error: function(xhr, status, error) {
+	        // Xử lý lỗi nếu có
+	        console.error(xhr.responseText);
+	    }
+	});</script>
+ 
 
 
 </html>

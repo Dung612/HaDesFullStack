@@ -42,7 +42,7 @@
     padding: 56px 0;
     background-color: rgb(232, 232, 232);
     width: 40%;
-    
+    overflow : hidden;
     height: 100vh;
 }
 .thanhtoanl{
@@ -176,8 +176,17 @@ h4{
     padding-bottom: 12px;
     border-bottom: 3px solid black;
     flex-wrap: wrap-reverse;
+        height: 50vh;
+    overflow: scroll;
 
 }
+.content::-webkit-scrollbar {
+    width: 4px; /* Chiều rộng thanh cuộn */
+  }
+.content::-webkit-scrollbar-thumb {
+    background: #888; /* Màu nền của thanh cuộn */
+    border-radius: 6px; /* Đường viền cong của thanh cuộn */
+  }
 
 .spgiohang{
     padding: 30px;
@@ -194,8 +203,8 @@ h4{
   }
 .spgiohang .contentform{
     
-    display: flex;
-    justify-content: space-between;
+    
+    
     align-items: center;
     border-bottom: 1px solid rgba(195, 195, 195, 0.653);
 }
@@ -213,6 +222,7 @@ h4{
 .leftsp{
     display: flex;
     align-items: center;
+    border-top: 1px solid black;
 }
 
 .spgiohang .anh img{
@@ -377,13 +387,23 @@ h4{
         </div>
         <div class="thanhtoanl-title">Thông Tin Giao Hàng</div>
         <div class="thanhtoanl-dangnhap">
+                        <c:choose>
+                 <c:when test="${empty sessionScope['SPRING_SECURITY_CONTEXT']}">
             <span>Bạn đã có tài khoản ?</span><a href="${classpath}/login">Đăng Nhập</a>
+             </c:when>
+                    <c:otherwise>
+                    
+                    <span>Xin chào ${loginedUser.name }</span>
+                    
+                    </c:otherwise>
+                 </c:choose>
         </div>
         <div class=".thanhtoanl-move">
-            <input class="fullname" type="text" name="txtName" value="${user.name }" placeholder="Họ Và Tên">
+        	
+           <input id="txtName" class="fullname" type="text" name="txtName" value="${loginedUser.name }" placeholder="Họ Và Tên">
             <div class="thanhtoanl-emailsdt">
-                <input class="email" type="email" name="txtEmail" value="${user.email }" placeholder="Email">
-                <input class="sdt" type="tel" name="txtMobile" value="${user.mobile }" placeholder="Số Điện Thoại">
+              <input id="txtEmail" class="email" type="email" name="txtEmail" value="${loginedUser.email }" placeholder="Email">
+                <input id="txtMobile" class="sdt" type="tel" name="txtMobile" value="${loginedUser.mobile }" placeholder="Số Điện Thoại">
             </div>
             <div class="thanhtoanl-api">
                 <select id="provinceSelect" class="sldiachi">
@@ -399,12 +419,12 @@ h4{
                 </select>
 
             </div>
-            <input class="diachi" type="text" name="txtAddress" value="${user.address }" placeholder="Địa Chỉ">
+            <input id="txtAddress" class="diachi" type="text" name="txtAddress" value="${loginedUser.address }" placeholder="Địa Chỉ">
             <h4>Phương Thức Thanh Toán</h4>
             <div class="thanhtoanl-phuongthuc">
                 <input class="cod" type="radio"><span>Thanh toán khi giao hàng (COD)</span>
             </div>
-            <button onclick="_placeOrder() class="btnsucces" >Hoàn Tất Đơn Hàng</button>
+            <button onclick="_placeOrder()" class="btnsucces" >Hoàn Tất Đơn Hàng</button>
 	</form>
 
         </div>
@@ -412,20 +432,21 @@ h4{
 
     </div>
     <div class="thanhtoanr">
+    <form method="get">
         <div class="thanhtoanr-giohang">
             <div class="spgiohang">
                 <div class="content">
                      <div class="contentform">
                      <c:forEach var="item" items="${cart.productCarts }" varStatus="loop">
-                        <div class="leftsp">
+                        <div class="leftsp" style="width: 100%">
                             <div class="anh">  
                                 <img src="${classpath}/FileUploads/${item.avatar }">
                             </div>
                             <div class="thongtin">
                                 <div class="name">${item.productName }</div>
-                                <div class="size">ĐEN / <SPan>L</SPan></div>
+                                <div class="size">ĐEN / <SPan>${item.size}</SPan></div>
                                 <div class="price">
-                                        <div class="soluong">1</div>
+                                        <div class="soluong"><span id="productQuantity_${item.productId }">${item.quantity }</span></div>
                                         <div class="gia"><fmt:formatNumber value="${item.price }" minFractionDigits="0" /><sup>đ</sup></div>
                                 </div>
                             </div>
@@ -439,10 +460,22 @@ h4{
                     <input type="text" placeholder="Mã Giảm Giá">
                     <button>Sử Dụng</button>
                 </div>
-                <div class="thanhtoanr-dangnhap">
+                <c:choose>
+                 <c:when test="${empty sessionScope['SPRING_SECURITY_CONTEXT']}">
+                	<div class="thanhtoanr-dangnhap">
                     <div class="titlesmall">Chương Trình Khách Hàng Thân Thiết</div>
                     <button onclick="redirectTologin()">Đăng Nhập</button>
                 </div>
+                </c:when>
+                    <c:otherwise>
+                <div class="thanhtoanr-dangnhap" style="white-space: pre-line;">
+                    <div class="titlesmall" style="width: 100%">Xin chào ${loginedUser.name },
+                     cảm ơn bạn vì đã quan tâm tới sản phẩm của chúng tôi.
+                     Hãy mua hàng để nhận giảm giá cho lần tiếp theo.
+                      </div>
+                </div>
+                </c:otherwise>
+                 </c:choose>
                  <div class="pricetotal">
                     <div class="titlepricetotal">TOTAL</div>
                     <div class="totalprice"><fmt:formatNumber value="${totalCartPrice }"
@@ -457,7 +490,7 @@ h4{
         </div>
 
 
-
+	</form>
     </div>
 </div>
 <div id="mess">
@@ -479,64 +512,7 @@ h4{
 </body>
 <!-- Jquery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<!--  <script src="${classpath}/frontend/accsents/base.js"></script> -->
-	<script type="text/javascript">
-		updateProductQuantity = function(_productId, _quantity) {
-			let data = {
-				productId : _productId, //lay theo id
-				quantity : _quantity
-			};
-
-			//$ === jQuery
-			jQuery.ajax({
-				url : "/update-product-quantity",
-				type : "POST",
-				contentType : "application/json",
-				data : JSON.stringify(data),
-				dataType : "json", //Kieu du lieu tra ve tu controller la json
-
-				success : function(jsonResult) {
-					let totalProducts = jsonResult.totalCartProducts; 
-					//Viet lai so luong sau khi bam nut -, +
-					$("#productQuantity_" + jsonResult.productId).html(jsonResult.newQuantity); 
-				},
-
-				error : function(jqXhr, textStatus, errorMessage) {
-					alert("An error occur");
-				}
-			});
-		}
-	</script>
-
-	<script type="text/javascript">
-		function _placeOrder() {
-			//javascript object
-			let data = {				
-				txtName : jQuery("#txtName").val(),
-				txtEmail : jQuery("#txtEmail").val(), //Get by Id
-				txtMobile : jQuery("#txtMobile").val(),
-				txtAddress : jQuery("#txtAddress").val(),
-			};
-			
-			//$ === jQuery
-			jQuery.ajax({
-				url : "/place-order",
-				type : "POST",
-				contentType: "application/json",
-				data : JSON.stringify(data),
-				dataType : "json", //Kieu du lieu tra ve tu controller la json
-				
-				success : function(jsonResult) {
-					alert(jsonResult.code + ": " + jsonResult.message);
-					//$("#placeOrderSuccess").html(jsonResult.message);
-				},
-				
-				error : function(jqXhr, textStatus, errorMessage) {
-					alert("An error occur");
-				}
-			});
-		}
-	</script>
+<  <script src="${classpath}/frontend/accsents/base.js"></script> 
 <script>
     
     const provinceSelect = document.getElementById('provinceSelect');
@@ -665,4 +641,66 @@ h4{
 });
 
     </script>
+	<script type="text/javascript">
+		addToCart = function(_productId, _quantity, _Size, _productName) {		
+			//alert("Thêm "  + _quantity + " sản phẩm '" + _productName + "' vào giỏ hàng ");
+			let data = {
+				productId: _productId, //lay theo id
+				quantity: _quantity,
+				size: _Size
+				
+			};
+				
+			//$ === jQuery
+			jQuery.ajax({
+				url : "/add-to-cart",
+				type : "POST",
+				contentType: "application/json",
+				data : JSON.stringify(data),
+				dataType : "json", //Kieu du lieu tra ve tu controller la json
+				
+				success : function(jsonResult) {
+					
+					let totalProducts = jsonResult.totalCartProducts;
+					$("#totalCartProductsId").html(totalProducts);
+					
+				},
+				
+				error : function(jqXhr, textStatus, errorMessage) {
+					alert(jsonResult.code + ': Đã có lỗi xay ra...!')
+				}
+			});
+		}
+	</script>
+
+	<script type="text/javascript">
+		function _placeOrder() {
+			//javascript object
+			let data = {				
+				txtName : jQuery("#txtName").val(),
+				txtEmail : jQuery("#txtEmail").val(), //Get by Id
+				txtMobile : jQuery("#txtMobile").val(),
+				txtAddress : jQuery("#txtAddress").val(),
+			};
+			
+			//$ === jQuery
+			jQuery.ajax({
+				url : "/place-order",
+				type : "POST",
+				contentType: "application/json",
+				data : JSON.stringify(data),
+				dataType : "json", //Kieu du lieu tra ve tu controller la json
+				
+				success : function(jsonResult) {
+					alert(jsonResult.code + ": " + jsonResult.message);
+					//$("#placeOrderSuccess").html(jsonResult.message);
+				},
+				
+				error : function(jqXhr, textStatus, errorMessage) {
+					alert("An error occur");
+				}
+			});
+		}
+	</script>
+
 </html>

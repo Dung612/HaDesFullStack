@@ -22,19 +22,32 @@
                         <li><a href="${classpath}/shop/${categoryId=5}">FOOTWEAR</a></li>
                         <li><a href="${classpath}/shop/${categoryId=7}">HAT</a></li>
                         <li><a href="${classpath}/shop/${categoryId=3}">BAGS</a></li>
-                        <li><a href="${classpath}/shop?categoryId=7">SALE</a></li>
+                        <li><a href="${classpath}/sale">SALE</a></li>
                         <li><a href="${classpath}/recruitment">RECRUITMENT</a></li>
                 </ul>
             </div>
             <ul class="acc">
                 <div class="accres">
+                <c:choose>
+                  <c:when test="${empty sessionScope['SPRING_SECURITY_CONTEXT']}">
                     <li class="accout"><a href="${classpath}/login" class="login" >ĐĂNG NHẬP</a>
                         <a href="${classpath}/signup" class="signup">ĐĂNG KÝ</a>
         
                     </li>
+                    </c:when>
+                    <c:otherwise>
+                    <li class="accout">
+                    <a href=""  >${loginedUser.name } </a>
+                    <a href="${classpath}/logout" >/ ĐĂNG XUẤT</a>
+                        
+        
+                    </li>
+                    
+                    </c:otherwise>
+                 </c:choose>
                     <!-- <li class="signin"><a href="">ĐĂNG KÝ</a></li> -->
                     <li class="btntimkiem">TÌM KIẾM</li>
-                    <li class="btngiohang">GIỎ HÀNG</li>
+                    <li class="btngiohang">GIỎ HÀNG(<span class="header__bottom-num" id="totalCartProductsId" style="color: red;">${totalCartproducts }</span>)</li>
                     <li> <select name="" id="lan">
                         <option value="VN">VI</option>
                         <option value="EN">EN</option>

@@ -42,7 +42,7 @@ public class CategoryController extends BaseController{
 	@RequestMapping(value = "add", method = RequestMethod.GET)
 	public String add(final Model model) {
 		
-		List<User> users = userService.findAll();
+		List<User> users = userService.findAll();	
 		model.addAttribute("users", users);
 		
 		Category category = new Category();
@@ -72,6 +72,7 @@ public class CategoryController extends BaseController{
 		//lay category trong db = id
 		
 		Category category = categoryService.getById(categororyId);
+		category.setUpdateDate(new Date());
 		
 		
 		model.addAttribute("category", category);
@@ -82,6 +83,8 @@ public class CategoryController extends BaseController{
 	@RequestMapping(value = "edit-save", method = RequestMethod.POST)
 	public String editSave(final Model model,
 			@ModelAttribute("category") Category category) {
+		
+		
 		
 		categoryService.saveOrUpdate(category);
 		
